@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/auth');
 var linkRouter = require('./routes/link');
-
+var redirectRouter = require('./routes/redirect');
 var app = express();
 
 var authMw = require('./middleware/authMw');
@@ -41,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(authMw);
 
 // route
+app.use('/', redirectRouter);
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/s', linkRouter);

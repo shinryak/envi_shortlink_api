@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { route } = require('.');
 const router = express.Router();
 
 const ShortLink = require('../model/shortLink');
@@ -13,7 +12,7 @@ router.get('/:query', async (req, res, next) => {
     console.log(query);
     const sl = await ShortLink.findOne({ query }).exec();
     if (!sl) {
-      next(createHttpError(404));
+      return next(createHttpError(404));
     }
     const { url } = sl;
     res.send({ url });
@@ -26,7 +25,7 @@ router.get('/r/:query', async (req, res, next) => {
     const { query } = req.params;
     const sl = await ShortLink.findOne({ query }).exec();
     if (!sl) {
-      next(createHttpError(404));
+      return next(createHttpError(404));
     }
     const { url } = sl;
     res.redirect(url);
@@ -54,14 +53,27 @@ router.patch('/:query/edit', async (req, res, next) => {
     const { query } = req.params;
     const sl = await ShortLink.findOne({ query }).exec();
     if (!sl) {
-      next(createHttpError(404));
+      return next(createHttpError(404));
     }
+    sl.query = query;
+    await sl.save();
+    res.send(sl);
   } catch (error) {
     next(error);
   }
 });
-router.delete('/:query/delete', (req, res) => {
-  console.log(req.body);
-  res.status(200).send({ msg: 'deleted' });
+router.delete('/:query/delete', async (req, res, next) => {
+  try {
+    const { query } = req.params;
+    const sl = await ShortLink.findOne({ query }).exec();
+    if (!sl) {
+      return next(createHttpError(404));
+    }
+    sl.isDeleted = true;
+    await sl.save();
+    res.send({ msg: 'deleted' });
+  } catch (error) {
+    next(error);
+  }
 });
 module.exports = router;
