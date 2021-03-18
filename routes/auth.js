@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
+const isUserMw = require('../middleware/isUserMw');
 
 const User = require('../model/user');
 const { use } = require('./link');
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
+router.get('/info', isUserMw, function (req, res, next) {
+  res.send({ user: req.local.user });
 });
 router.post('/create', async (req, res, next) => {
   try {
