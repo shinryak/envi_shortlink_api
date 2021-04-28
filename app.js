@@ -64,11 +64,11 @@ app.use(defaultMw);
 app.use(authMw);
 
 // route
-app.use('/', redirectRouter);
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/s', linkRouter);
-app.use('/user-profile', userProfile);
+app.use('/userp', userProfile);
+app.use('/', redirectRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

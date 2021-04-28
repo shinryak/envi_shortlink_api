@@ -14,6 +14,8 @@ router.get('/:query', async (req, res, next) => {
     }
     const { url } = sl;
     res.redirect(url);
+    // increase redirect count
+    ShortLink.findByIdAndUpdate(sl._id, { $inc: { redirectCount: 1 } }).exec();
   } catch (error) {
     next(error);
   }

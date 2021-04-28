@@ -7,6 +7,7 @@ const ShortLinkSchema = Schema(
     user: { type: Schema.Types.ObjectId, index: true },
     isDeleted: { type: Schema.Types.Boolean, default: false },
     isDisable: { type: Schema.Types.Boolean, default: false },
+    redirectCount: { type: Schema.Types.Number, default: 0 },
   },
   {
     toObject: {
