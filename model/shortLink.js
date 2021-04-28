@@ -3,8 +3,8 @@ const { Schema, model } = require('mongoose');
 const ShortLinkSchema = Schema(
   {
     url: Schema.Types.String,
-    query: { type: Schema.Types.String, minLength: 6 },
-    user: Schema.Types.ObjectId,
+    query: { type: Schema.Types.String, minLength: 6, unique: true },
+    user: { type: Schema.Types.ObjectId, index: true },
     isDeleted: { type: Schema.Types.Boolean, default: false },
     isDisable: { type: Schema.Types.Boolean, default: false },
   },
