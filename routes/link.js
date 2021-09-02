@@ -68,42 +68,4 @@ router.patch('/:query/edit', async (req, res, next) => {
     next(error);
   }
 });
-/**
- * Method: DELETE
- * Delete link. Set field isDeteted: true
- */
-router.delete('/:query/delete', async (req, res, next) => {
-  try {
-    const { query } = req.params;
-    const sl = await ShortLink.findOne({ query }).exec();
-    if (!sl) {
-      return next(createHttpError(404));
-    }
-    sl.isDeleted = true;
-    await sl.save();
-    res.send({ msg: 'deleted' });
-  } catch (error) {
-    next(error);
-  }
-});
-/**
- * Method: GET
- * Restore deleted link. Set field isDeteted: false
- */
-router.get('/:query/restore', async (req, res, next) => {
-  try {
-    const { query } = req.params;
-    const sl = await ShortLink.findOneAndUpdate(
-      { query },
-      { isDeleted: false },
-      { new: true }
-    ).exec();
-    if (!sl) {
-      return next(createHttpError(404));
-    }
-    res.send(sl);
-  } catch (error) {
-    next(error);
-  }
-});
 module.exports = router;
