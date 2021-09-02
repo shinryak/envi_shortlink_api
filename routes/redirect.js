@@ -8,7 +8,10 @@ const createHttpError = require('http-errors');
 router.get('/:query', async (req, res, next) => {
   try {
     const { query } = req.params;
-    const sl = await ShortLink.findOne({ query }).exec();
+    const sl = await ShortLink.findOne({
+      query,
+      isDeleted: { $ne: true },
+    }).exec();
     if (!sl) {
       return next(createHttpError(404));
     }
