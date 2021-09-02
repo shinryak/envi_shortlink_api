@@ -13,7 +13,9 @@ router.get('/:query', async (req, res, next) => {
       isDeleted: { $ne: true },
     }).exec();
     if (!sl) {
-      return next(createHttpError(404));
+      return res.render('error', {
+        error: createHttpError(404, 'Link not found or deleted'),
+      });
     }
     const { url } = sl;
     res.redirect(url);
