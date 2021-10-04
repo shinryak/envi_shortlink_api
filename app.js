@@ -6,6 +6,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var bearerToken = require('express-bearer-token');
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/auth');
@@ -16,16 +17,19 @@ var app = express();
 
 var defaultMw = require('./defaultMw');
 var authMw = require('./middleware/authMw');
+
+console.log(app.get('env'));
+const mongodb =
+  app.get('env') === 'development' ? process.env.MONGO_DEV : process.env.MONGO;
+console.log(mongodb);
 mongoose
-  .connect(
-    app.get('env') == 'development' ? process.env.MONGO_DEV : process.env.MONGO,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    }
-  )
+  .connect(mongodb, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+    autoIndex: true,
+  })
   .then(() => console.log('connected to db'))
   .catch((err) => console.log(err));
 
@@ -36,6 +40,7 @@ app.set('view engine', 'jade');
 // cors
 var whitelist = [
   'https://admin.envistv.com',
+  'https://cpanel.envistv.com',
   'http://localhost',
   'http://localhost:3001',
   'http://localhost:3011',
@@ -52,7 +57,7 @@ var corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
-
+app.use(bearerToken());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -46,7 +46,7 @@ router.post('/add', async (req, res, next) => {
     const shortLink = ShortLink({
       url,
       query,
-      user: mongoose.Types.ObjectId(req.local.user.id),
+      user: mongoose.Types.ObjectId(req.local.user.uid),
     });
     await shortLink.save();
     res.status(200).send(shortLink);

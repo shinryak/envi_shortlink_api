@@ -30,7 +30,7 @@ router.post('/login', async (req, res, next) => {
       return res.json({ success: true, token: token, user });
     }
     const err = new Error('password not match');
-    err.status = 403;
+    err.status = 401;
     throw err;
   } catch (error) {
     next(error);
