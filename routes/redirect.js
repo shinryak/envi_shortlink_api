@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-const ShortLink = require('../model/shortLink');
+const ShortLink = require('../model/link');
 const createHttpError = require('http-errors');
 
 router.get('/:query', async (req, res, next) => {

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-const ShortLink = require('../model/shortLink');
+const ShortLink = require('../model/link');
 const isUserMw = require('../middleware/isUserMw');
 const createHttpError = require('http-errors');
 const { route } = require('./redirect');
@@ -46,7 +46,7 @@ router.post('/add', async (req, res, next) => {
     const shortLink = ShortLink({
       url,
       query,
-      user: mongoose.Types.ObjectId(req.local.user.uid),
+      user: mongoose.Types.ObjectId(req.user.uid),
     });
     await shortLink.save();
     res.status(200).send(shortLink);

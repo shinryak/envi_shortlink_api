@@ -6,9 +6,9 @@ module.exports = (req, res, next) => {
   try {
     const token = req.token;
     const verify = jwt.verify(token, publicPem);
-    req.local.user = verify;
+    req.user = verify;
   } catch (error) {
-    req.local.user = null;
+    req.user = null;
   }
   next();
 };
